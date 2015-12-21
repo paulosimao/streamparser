@@ -1,0 +1,27 @@
+{
+  "name": "streamparser",
+  "version": "1.0.0",
+  "description": "Simple parser, triggers events upon data receival and processing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulosimao/streamparser.git"
+  },
+  "keywords": [
+    "stream",
+    "parser"
+  ],
+  "author": "Paulo Simao",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/paulosimao/streamparser/issues"
+  },
+  "homepage": "https://github.com/paulosimao/streamparser#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  }
+}
