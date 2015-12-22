@@ -22,6 +22,7 @@
   "homepage": "https://github.com/paulosimao/streamparser#readme",
   "devDependencies": {
     "chai": "^3.4.1",
+    "memory-streams": "^0.1.0",
     "mocha": "^2.3.4"
   }
 }
