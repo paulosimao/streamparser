@@ -1,6 +1,6 @@
 {
   "name": "streamparser",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple parser, triggers events upon data receival and processing",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,13 @@
   },
   "keywords": [
     "stream",
-    "parser"
+    "parser",
+    "line driven",
+    "event",
+    "field",
+    "map",
+    "mapper",
+    "text"
   ],
   "author": "Paulo Simao",
   "license": "GPL-2.0",

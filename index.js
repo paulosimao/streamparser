@@ -9,6 +9,10 @@ var fs = require('fs');
  * config = {
  *   linebreak:'\r\n',
  *   fieldbreak:null,
+ *   models:{
+ *      a:{
+ *
+ *   }
  * }
  *
  *
@@ -22,14 +26,15 @@ module.exports = function (src, pconfig) {
     stream.pause();
     var ret = new eventemitter();
     var buffer = '';
+    var linecounter = 1;
 
-    stream.on('end', function () {
+    ret.onend = function () {
         var parts = buffer.split(config.linebreak);
         for (var i = 0; i < parts.length; i++) {
-            ret.emit('line', splitFields(parts[i]));
+            ret.emit('line', ret.splitFields(parts[i]));
         }
         ret.emit('end');
-    });
+    };
 
     ret.resume = function () {
         //Once on data is attached stream will start to pump.
@@ -37,20 +42,42 @@ module.exports = function (src, pconfig) {
             buffer = buffer + chunk.toString();
             var parts = buffer.split(config.linebreak);
             for (var i = 0; i < parts.length - 1; i++) {
-                ret.emit('line', splitFields(parts[i]));
+                linecounter++;
+                ret.emit('line', ret.splitFields(parts[i]));
             }
             buffer = parts[parts.length - 1];
         });
         stream.resume();
     };
 
-    function splitFields(line) {
+    ret.splitFields = function (line) {
         if (config.fieldbreak) {
-            return line.split(config.fieldbreak)
+            var ret = line.split(config.fieldbreak);
+            if (config.models && config.models[ret[0]]) {
+                var retobj = {};
+                var i = 0;
+                for (m in config.models[ret[0]].template) {
+                    var regex = new RegExp(config.models[ret[0]].template[m]);
+                    if (regex.test(ret[i])) {
+                        retobj[m] = ret[i];
+                        i++;
+                    } else {
+                        throw new Error('Field:' + m + ' in line: ' + linecounter + ' does not match Regex:' + config.models[ret[0]].template[m] + '. Value found:' + ret[i]);
+                    }
+
+                }
+                if (config.models && config.models[ret[0]] && config.models[ret[0]].postprocess) {
+                    config.models[ret[0]].postprocess(retobj);
+                }
+                return retobj;
+            }
+            return ret;
         } else {
             return line;
         }
-    }
+    };
+
+    stream.on('end', ret.onend);
 
     return ret;
 };
